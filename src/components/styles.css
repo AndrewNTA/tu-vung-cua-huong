@@ -22,16 +22,39 @@
   border-radius: 0.5rem;
   font-size: 0.875rem;
   line-height: 1.25rem;
-  color: #ffffff;
   font-weight: 600;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   height: 2.5rem;
-  background-color: rgb(15, 23, 42, 1);
   cursor: pointer;
   border: 0 solid #e5e7eb;
   box-sizing: border-box;
+  color: #ffffff;
+  background-color: #0f172a;
+}
+.btn-full {
   width: 100%;
+}
+.btn-outline {
+  color: #0f172a;
+  background-color: #ffffff;
+  border: 2px solid #0f172a;
+}
+.adr-button-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.adr-row {
+  margin-bottom: 0.75rem;
+}
+.adr-divider {
+  height: 1px;
+  width: calc(100% - 3rem);
+  background-color: #0f172a;
+  margin: 2rem 1.5rem;
+  border-radius: 1px;
+  box-sizing: border-box;
 }
 .adr-menu {
   padding-left: 2.5rem;
@@ -49,6 +72,6 @@
   box-sizing: border-box;
 }
 .adr-menu-icon {
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
 }

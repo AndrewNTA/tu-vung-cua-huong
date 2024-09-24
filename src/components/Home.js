@@ -19,8 +19,19 @@ export function Home() {
           </ul>
         </div>
       </div>
-      <div>
-        <button className="adr-button">Xem nghĩa</button>
+      <div className='adr-button-group'>
+        <button className="adr-button btn-outline">Back</button>
+        <button className="adr-button">Next</button>
+      </div>
+      <div className='adr-divider'/>
+      <div className='adr-row'>
+        <button className="adr-button btn-full">Xem nghĩa</button>
+      </div>
+      <div className='adr-row'>
+        <button className="adr-button btn-full">Đã thuộc</button>
+      </div>
+      <div className='adr-row'>
+        <button className="adr-button btn-full">Quan tâm</button>
       </div>
       <Menu />
     </div>
