@@ -18,8 +18,8 @@ export function Home() {
     setIsShow(false);
   };
 
-  const showText = () => {
-    setIsShow(true);
+  const handleShow = () => {
+    setIsShow((isShow) => !isShow);
   };
 
   if (!Boolean(words) || !words.length) {
@@ -39,7 +39,7 @@ export function Home() {
         <div className="adr-primary-text">{primaryText}</div>
         <div>{`(${currentWord.wordType}) ${currentWord.pronounce}`}</div>
         {currentWord.relatedWords && (
-          <div>{`Related words: ${currentWord.relatedWords}`}</div>
+          <div>{`Từ liên quan: ${currentWord.relatedWords}`}</div>
         )}
         <div>
           {exampleList && exampleList.length && (
@@ -59,28 +59,32 @@ export function Home() {
           onClick={goBack}
           className="adr-button btn-outline"
         >
-          Back
+          Sau
         </button>
-        <div className='adr-index'>{`${index + 1} / ${words.length}`}</div>
+        <div className="adr-index">{`${index + 1} / ${words.length}`}</div>
         <button
           disabled={index === words.length - 1}
           onClick={goNext}
           className="adr-button"
         >
-          Next
+          Trước
         </button>
       </div>
       <div className="adr-divider" />
       <div className="adr-row">
-        <button className="adr-button btn-full" onClick={showText}>
-          Xem nghĩa
+        <button className="adr-button btn-full" onClick={handleShow}>
+          {isShow ? 'Xem tiếng Anh' : 'Xem tiếng Việt'}
         </button>
       </div>
       <div className="adr-row">
-        <button className="adr-button btn-full">Đã thuộc</button>
+        <button className="adr-button btn-full">
+          {currentWord.isRemembered ? 'Bỏ đã thuộc' : 'Đã thuộc'}
+        </button>
       </div>
       <div className="adr-row">
-        <button className="adr-button btn-full">Quan tâm</button>
+        <button className="adr-button btn-full">
+          {currentWord.isInterested ? 'Bỏ quan tâm' : 'Quan tâm'}
+        </button>
       </div>
       <Menu />
     </div>
