@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Home } from './components/Home';
 import { useLazyQuery, gql } from '@apollo/client';
+import { Menu } from './components/Menu';
 
 const WORDS_QUERY = gql`
   query Words($skip: Int) {
@@ -19,8 +20,14 @@ const WORDS_QUERY = gql`
   }
 `;
 
+export const HOME_TAB = 'home';
+export const REMEMBERED_TAB = 'remembered';
+export const INTERESTED_TAB = 'interested';
+export const PRACTICE_TAB = 'practice';
+
 export const AppContext = React.createContext({
   words: null,
+  tab: null,
 });
 
 function App() {
@@ -30,6 +37,7 @@ function App() {
   const [getWords, { data }] = useLazyQuery(WORDS_QUERY);
   const [words, setWords] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [tab, setTab] = useState(HOME_TAB);
 
   useEffect(() => {
     if (!skipNumber.current && words.length === 0) {
@@ -57,17 +65,23 @@ function App() {
     }
   }, [data?.words, getWords, words]);
 
+  const handleChangeTab = (selectedTab) => {
+    setTab(selectedTab);
+  };
+
   if (loading) {
-    return <p>Loading...</p>
+    return <p>Loading...</p>;
   }
   return (
     <div className="App">
       <AppContext.Provider
         value={{
           words,
+          tab,
         }}
       >
         <Home />
+        <Menu onChange={handleChangeTab} />
       </AppContext.Provider>
     </div>
   );

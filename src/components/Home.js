@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import './styles.css';
-import { Menu } from './Menu';
 import { AppContext } from '../App';
 
 export function Home() {
@@ -86,7 +85,6 @@ export function Home() {
           {currentWord.isInterested ? 'Bỏ quan tâm' : 'Quan tâm'}
         </button>
       </div>
-      <Menu />
     </div>
   );
 }
