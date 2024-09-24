@@ -7,6 +7,14 @@ const WORDS_QUERY = gql`
     words(first: 100, skip: $skip, orderBy: publishedAt_DESC) {
       id
       englishText
+      vietnamText
+      englishExample
+      vietnamExample
+      wordType
+      pronounce
+      relatedWords
+      isRemembered
+      isInterested
     }
   }
 `;
