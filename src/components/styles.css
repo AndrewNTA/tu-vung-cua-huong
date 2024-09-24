@@ -13,6 +13,9 @@
   height: 35vh;
   overflow-y: auto;
 }
+.adr-center {
+  text-align: center;
+}
 .adr-index {
   font-weight: 600;
 }

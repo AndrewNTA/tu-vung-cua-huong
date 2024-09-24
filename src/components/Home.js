@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import './styles.css';
-import { AppContext } from '../App';
+import { AppContext, INTERESTED_TAB, REMEMBERED_TAB } from '../App';
 
 export function Home() {
   const [index, setIndex] = useState(0);
   const [isShow, setIsShow] = useState(false);
-  const { words } = useContext(AppContext);
+  const { words, tab } = useContext(AppContext);
 
   const goNext = () => {
     setIndex(() => index + 1);
@@ -21,11 +21,23 @@ export function Home() {
     setIsShow((isShow) => !isShow);
   };
 
-  if (!Boolean(words) || !words.length) {
-    return null;
+  const getWordList = () => {
+    if (tab === REMEMBERED_TAB) {
+      return words.filter((w) => w.isRemembered);
+    }
+    if (tab === INTERESTED_TAB) {
+      return words.filter((w) => w.isInterested);
+    }
+    return words;
+  };
+
+  const filterWords = getWordList();
+
+  if (!Boolean(filterWords) || !filterWords.length) {
+    return <p className='adr-center'>Không có từ nào!!!</p>;
   }
 
-  const currentWord = words[index];
+  const currentWord = filterWords[index];
   const primaryText = isShow
     ? currentWord.vietnamText
     : currentWord.englishText;

@@ -70,7 +70,7 @@ function App() {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <p className='adr-center'>Loading...</p>;
   }
   return (
     <div className="App">
