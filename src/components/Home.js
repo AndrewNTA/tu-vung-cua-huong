@@ -61,6 +61,7 @@ export function Home() {
         >
           Back
         </button>
+        <div className='adr-index'>{`${index + 1} / ${words.length}`}</div>
         <button
           disabled={index === words.length - 1}
           onClick={goNext}
