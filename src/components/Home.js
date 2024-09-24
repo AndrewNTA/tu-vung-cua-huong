@@ -8,6 +8,7 @@ export function Home() {
       <div className="adr-card">
         <div className="adr-primary-text">School</div>
         <div>(noun) /sku:l/</div>
+        <div>Related words: class</div>
         <div>
           <ul className="adr-ul">
             <li>
