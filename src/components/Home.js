@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useMemo,
   useState,
+  useRef,
 } from 'react';
 import './styles.css';
 import { AppContext, INTERESTED_TAB, REMEMBERED_TAB } from '../App';
@@ -38,8 +39,15 @@ const PUBLISH_WORD = gql`
 export function Home() {
   const [index, setIndex] = useState(0);
   const [isShow, setIsShow] = useState(false);
-  const [currentWord, setCurrentWord] = useState(null);
-  const { words, tab } = useContext(AppContext);
+  const { words, tab, updateWords } = useContext(AppContext);
+  const currentTab = useRef(null);
+
+  useEffect(() => {
+    if (tab !== currentTab.current) {
+      currentTab.current = tab;
+      setIndex(0);
+    }
+  }, [tab]);
   const [
     updateIsRemembered,
     { data: dataRemembered, loading: loadingRemembered },
@@ -75,29 +83,40 @@ export function Home() {
   }, [tab, words]);
 
   const filterWords = useMemo(() => getWordList(), [getWordList]);
-
-  useEffect(() => {
-    setCurrentWord(filterWords[index]);
-  }, [filterWords, index]);
+  const currentWord = filterWords[index];
 
   useEffect(() => {
     if (
       Boolean(dataRemembered) &&
+      Boolean(currentWord) &&
       dataRemembered?.updateWord?.id === currentWord.id
     ) {
-      setCurrentWord({
-        ...currentWord,
-        isRemembered: dataRemembered?.updateWord?.isRemembered,
+      const newWords = words.map((w) => {
+        if (w.id === currentWord.id) {
+          return {
+            ...currentWord,
+            isRemembered: dataRemembered?.updateWord?.isRemembered,
+          };
+        }
+        return w;
       });
+      updateWords(newWords);
     }
     if (
       Boolean(dataInterested) &&
+      Boolean(currentWord) &&
       dataInterested?.updateWord?.id === currentWord.id
     ) {
-      setCurrentWord({
-        ...currentWord,
-        isInterested: dataInterested?.updateWord?.isInterested,
+      const newWords = words.map((w) => {
+        if (w.id === currentWord.id) {
+          return {
+            ...currentWord,
+            isInterested: dataInterested?.updateWord?.isInterested,
+          };
+        }
+        return w;
       });
+      updateWords(newWords);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataInterested, dataRemembered]);
@@ -165,9 +184,11 @@ export function Home() {
         >
           Trước
         </button>
-        <div className="adr-index">{`${index + 1} / ${words.length}`}</div>
+        <div className="adr-index">{`${index + 1} / ${
+          filterWords.length
+        }`}</div>
         <button
-          disabled={index === words.length - 1}
+          disabled={index === filterWords.length - 1}
           onClick={goNext}
           className="adr-button"
         >

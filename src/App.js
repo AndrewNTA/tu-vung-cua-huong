@@ -28,6 +28,7 @@ export const PRACTICE_TAB = 'practice';
 export const AppContext = React.createContext({
   words: null,
   tab: null,
+  updateWords: () => {},
 });
 
 function App() {
@@ -70,7 +71,7 @@ function App() {
   };
 
   if (loading) {
-    return <p className='adr-center'>Loading...</p>;
+    return <p className="adr-center">Loading...</p>;
   }
   return (
     <div className="App">
@@ -78,6 +79,7 @@ function App() {
         value={{
           words,
           tab,
+          updateWords: (newWords) => setWords(newWords),
         }}
       >
         <Home />
