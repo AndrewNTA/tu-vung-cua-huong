@@ -1,8 +1,7 @@
 .home-container {
-  min-height: 100vh;
   background-color: rgb(255, 255, 255, 1);
   box-sizing: border-box;
-  padding: 32px 16px;
+  padding: 20px 16px;
 }
 .adr-card {
   line-height: 1.5rem;
@@ -10,8 +9,7 @@
   padding: 1.5rem;
   border-radius: 0.5rem;
   margin-bottom: 1.5rem;
-  height: 35vh;
-  overflow-y: auto;
+  min-height: 30vh;
 }
 .adr-center {
   text-align: center;
@@ -60,7 +58,7 @@
   height: 1px;
   width: calc(100% - 3rem);
   background-color: #0f172a;
-  margin: 2rem 1.5rem;
+  margin: 1.5rem 1.5rem;
   border-radius: 1px;
   box-sizing: border-box;
 }
