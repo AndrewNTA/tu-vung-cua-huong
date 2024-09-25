@@ -1,11 +1,39 @@
-import React, { useContext, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import './styles.css';
 import { AppContext, INTERESTED_TAB, REMEMBERED_TAB } from '../App';
+import { gql, useMutation } from '@apollo/client';
+
+const UPDATE_IS_REMEMBERED = gql`
+  mutation UpdateIsRemembered($id: ID!, $isRemembered: Boolean!) {
+    updateWord(where: { id: $id }, data: { isRemembered: $isRemembered }) {
+      id
+      isRemembered
+    }
+  }
+`;
+
+const PUBLISH_WORD = gql`
+  mutation PublishWord($id: ID!) {
+    publishWord(where: { id: $id }, to: PUBLISHED) {
+      id
+    }
+  }
+`;
 
 export function Home() {
   const [index, setIndex] = useState(0);
   const [isShow, setIsShow] = useState(false);
+  const [currentWord, setCurrentWord] = useState(null);
   const { words, tab } = useContext(AppContext);
+  const [updateIsRemembered, { data, loading }] =
+    useMutation(UPDATE_IS_REMEMBERED);
+  const [publishWord] = useMutation(PUBLISH_WORD);
 
   const goNext = () => {
     setIndex(() => index + 1);
@@ -21,7 +49,7 @@ export function Home() {
     setIsShow((isShow) => !isShow);
   };
 
-  const getWordList = () => {
+  const getWordList = useCallback(() => {
     if (tab === REMEMBERED_TAB) {
       return words.filter((w) => w.isRemembered);
     }
@@ -29,21 +57,47 @@ export function Home() {
       return words.filter((w) => w.isInterested);
     }
     return words;
-  };
+  }, [tab, words]);
 
-  const filterWords = getWordList();
+  const filterWords = useMemo(() => getWordList(), [getWordList]);
 
-  if (!Boolean(filterWords) || !filterWords.length) {
-    return <p className='adr-center'>Không có từ nào!!!</p>;
+  useEffect(() => {
+    setCurrentWord(filterWords[index]);
+  }, [filterWords, index]);
+
+  useEffect(() => {
+    if (Boolean(data) && data?.updateWord?.id === currentWord.id) {
+      setCurrentWord({
+        ...currentWord,
+        isRemembered: data?.updateWord?.isRemembered,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  if (!Boolean(filterWords) || !filterWords.length || !currentWord) {
+    return <p className="adr-center">Không có từ nào!!!</p>;
   }
 
-  const currentWord = filterWords[index];
   const primaryText = isShow
     ? currentWord.vietnamText
     : currentWord.englishText;
   const exampleList = isShow
     ? currentWord.vietnamExample
     : currentWord.englishExample;
+
+  const handleRemember = () => {
+    updateIsRemembered({
+      variables: {
+        id: currentWord.id,
+        isRemembered: !currentWord.isRemembered,
+      },
+    });
+    publishWord({
+      variables: { id: currentWord.id },
+    });
+  };
+
   return (
     <div className="home-container">
       <div className="adr-card">
@@ -70,7 +124,7 @@ export function Home() {
           onClick={goBack}
           className="adr-button btn-outline"
         >
-          Sau
+          Trước
         </button>
         <div className="adr-index">{`${index + 1} / ${words.length}`}</div>
         <button
@@ -78,7 +132,7 @@ export function Home() {
           onClick={goNext}
           className="adr-button"
         >
-          Trước
+          Sau
         </button>
       </div>
       <div className="adr-divider" />
@@ -88,7 +142,11 @@ export function Home() {
         </button>
       </div>
       <div className="adr-row">
-        <button className="adr-button btn-full">
+        <button
+          className="adr-button btn-full"
+          onClick={handleRemember}
+          disabled={loading}
+        >
           {currentWord.isRemembered ? 'Bỏ đã thuộc' : 'Đã thuộc'}
         </button>
       </div>

@@ -5,7 +5,7 @@ import { Menu } from './components/Menu';
 
 const WORDS_QUERY = gql`
   query Words($skip: Int) {
-    words(first: 100, skip: $skip, orderBy: publishedAt_DESC) {
+    words(first: 100, skip: $skip) {
       id
       englishText
       vietnamText

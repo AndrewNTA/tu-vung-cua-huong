@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import { sendToVercelAnalytics } from './vitals';
 
 const client = new ApolloClient({
-  uri: 'https://ap-south-1.cdn.hygraph.com/content/cm1fyb4ww01jm07uvzwivvv9f/master123',
+  uri: 'https://ap-south-1.cdn.hygraph.com/content/cm1fyb4ww01jm07uvzwivvv9f/master',
   cache: new InMemoryCache(),
 });
 
