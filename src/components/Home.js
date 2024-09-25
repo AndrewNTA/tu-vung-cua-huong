@@ -18,6 +18,15 @@ const UPDATE_IS_REMEMBERED = gql`
   }
 `;
 
+const UPDATE_IS_INTERESTED = gql`
+  mutation UpdateIsInterested($id: ID!, $isInterested: Boolean!) {
+    updateWord(where: { id: $id }, data: { isInterested: $isInterested }) {
+      id
+      isInterested
+    }
+  }
+`;
+
 const PUBLISH_WORD = gql`
   mutation PublishWord($id: ID!) {
     publishWord(where: { id: $id }, to: PUBLISHED) {
@@ -31,8 +40,14 @@ export function Home() {
   const [isShow, setIsShow] = useState(false);
   const [currentWord, setCurrentWord] = useState(null);
   const { words, tab } = useContext(AppContext);
-  const [updateIsRemembered, { data, loading }] =
-    useMutation(UPDATE_IS_REMEMBERED);
+  const [
+    updateIsRemembered,
+    { data: dataRemembered, loading: loadingRemembered },
+  ] = useMutation(UPDATE_IS_REMEMBERED);
+  const [
+    updateIsInterested,
+    { data: dataInterested, loading: loadingInterested },
+  ] = useMutation(UPDATE_IS_INTERESTED);
   const [publishWord] = useMutation(PUBLISH_WORD);
 
   const goNext = () => {
@@ -66,14 +81,26 @@ export function Home() {
   }, [filterWords, index]);
 
   useEffect(() => {
-    if (Boolean(data) && data?.updateWord?.id === currentWord.id) {
+    if (
+      Boolean(dataRemembered) &&
+      dataRemembered?.updateWord?.id === currentWord.id
+    ) {
       setCurrentWord({
         ...currentWord,
-        isRemembered: data?.updateWord?.isRemembered,
+        isRemembered: dataRemembered?.updateWord?.isRemembered,
+      });
+    }
+    if (
+      Boolean(dataInterested) &&
+      dataInterested?.updateWord?.id === currentWord.id
+    ) {
+      setCurrentWord({
+        ...currentWord,
+        isInterested: dataInterested?.updateWord?.isInterested,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [dataInterested, dataRemembered]);
 
   if (!Boolean(filterWords) || !filterWords.length || !currentWord) {
     return <p className="adr-center">Không có từ nào!!!</p>;
@@ -91,6 +118,18 @@ export function Home() {
       variables: {
         id: currentWord.id,
         isRemembered: !currentWord.isRemembered,
+      },
+    });
+    publishWord({
+      variables: { id: currentWord.id },
+    });
+  };
+
+  const handleInterest = () => {
+    updateIsInterested({
+      variables: {
+        id: currentWord.id,
+        isInterested: !currentWord.isInterested,
       },
     });
     publishWord({
@@ -145,13 +184,17 @@ export function Home() {
         <button
           className="adr-button btn-full"
           onClick={handleRemember}
-          disabled={loading}
+          disabled={loadingRemembered}
         >
           {currentWord.isRemembered ? 'Bỏ đã thuộc' : 'Đã thuộc'}
         </button>
       </div>
       <div className="adr-row">
-        <button className="adr-button btn-full">
+        <button
+          className="adr-button btn-full"
+          onClick={handleInterest}
+          disabled={loadingInterested}
+        >
           {currentWord.isInterested ? 'Bỏ quan tâm' : 'Quan tâm'}
         </button>
       </div>
