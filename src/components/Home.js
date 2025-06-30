@@ -9,11 +9,13 @@ import React, {
 import './styles.css';
 import {
   AppContext,
+  HOME_TAB,
   INTERESTED_TAB,
   PRACTICE_TAB,
   REMEMBERED_TAB,
 } from '../App';
 import { gql, useMutation } from '@apollo/client';
+import { Search } from './Search';
 
 const UPDATE_IS_REMEMBERED = gql`
   mutation UpdateIsRemembered($id: ID!, $isRemembered: Boolean!) {
@@ -177,6 +179,7 @@ export function Home() {
   return (
     <div className="home-container">
       <div className="adr-page-title">{displayPageName()}</div>
+      {tab === HOME_TAB && <Search />}
       <div className="adr-card">
         <div className="adr-primary-text">{primaryText}</div>
         <div>{`(${currentWord.wordType}) ${currentWord.pronounce}`}</div>
