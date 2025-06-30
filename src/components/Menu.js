@@ -1,4 +1,3 @@
-import React from 'react';
 import IconHome from '../icons/icon-home.png';
 import IconNote from '../icons/icon-note.png';
 import IconHeart from '../icons/icon-heart.png';
@@ -21,13 +20,13 @@ export function Menu({ onChange }) {
         onClick={() => onChange(PRACTICE_TAB)}
       />
       <img
-        src={IconHeart}
+        src={IconLabel}
         className="adr-menu-icon"
         alt="remembered"
         onClick={() => onChange(REMEMBERED_TAB)}
       />
       <img
-        src={IconLabel}
+        src={IconHeart}
         className="adr-menu-icon"
         alt="interested"
         onClick={() => onChange(INTERESTED_TAB)}

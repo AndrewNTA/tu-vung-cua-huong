@@ -11,6 +11,14 @@
   margin-bottom: 1.5rem;
   min-height: 30vh;
 }
+.adr-page-title {
+  text-align: center;
+  line-height: 1.5rem;
+  padding: 12px 0;
+  margin-bottom: 8px;
+  font-size: 24px;
+  font-weight: 600;
+}
 .adr-center {
   text-align: center;
 }

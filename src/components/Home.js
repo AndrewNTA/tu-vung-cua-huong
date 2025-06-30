@@ -7,7 +7,12 @@ import React, {
   useRef,
 } from 'react';
 import './styles.css';
-import { AppContext, INTERESTED_TAB, REMEMBERED_TAB } from '../App';
+import {
+  AppContext,
+  INTERESTED_TAB,
+  PRACTICE_TAB,
+  REMEMBERED_TAB,
+} from '../App';
 import { gql, useMutation } from '@apollo/client';
 
 const UPDATE_IS_REMEMBERED = gql`
@@ -122,7 +127,7 @@ export function Home() {
   }, [dataInterested, dataRemembered]);
 
   if (!Boolean(filterWords) || !filterWords.length || !currentWord) {
-    return <p className="adr-center">Không có từ nào!!!</p>;
+    return <p className="adr-center">No item found!!!</p>;
   }
 
   const primaryText = isShow
@@ -156,8 +161,22 @@ export function Home() {
     });
   };
 
+  const displayPageName = () => {
+    if (tab === REMEMBERED_TAB) {
+      return 'Rememberd Page';
+    }
+    if (tab === INTERESTED_TAB) {
+      return 'Interested Page';
+    }
+    if (tab === PRACTICE_TAB) {
+      return 'Practive Page';
+    }
+    return 'Home Page';
+  };
+
   return (
     <div className="home-container">
+      <div className="adr-page-title">{displayPageName()}</div>
       <div className="adr-card">
         <div className="adr-primary-text">{primaryText}</div>
         <div>{`(${currentWord.wordType}) ${currentWord.pronounce}`}</div>
@@ -182,7 +201,7 @@ export function Home() {
           onClick={goBack}
           className="adr-button btn-outline"
         >
-          Trước
+          Prev
         </button>
         <div className="adr-index">{`${index + 1} / ${
           filterWords.length
@@ -192,13 +211,13 @@ export function Home() {
           onClick={goNext}
           className="adr-button"
         >
-          Sau
+          Next
         </button>
       </div>
       <div className="adr-divider" />
       <div className="adr-row">
         <button className="adr-button btn-full" onClick={handleShow}>
-          {isShow ? 'Xem tiếng Anh' : 'Xem tiếng Việt'}
+          {isShow ? 'English' : 'Vietnamese'}
         </button>
       </div>
       <div className="adr-row">
@@ -207,7 +226,7 @@ export function Home() {
           onClick={handleRemember}
           disabled={loadingRemembered}
         >
-          {currentWord.isRemembered ? 'Bỏ đã thuộc' : 'Đã thuộc'}
+          {currentWord.isRemembered ? 'Skip Remembered' : 'Remembered'}
         </button>
       </div>
       <div className="adr-row">
@@ -216,7 +235,7 @@ export function Home() {
           onClick={handleInterest}
           disabled={loadingInterested}
         >
-          {currentWord.isInterested ? 'Bỏ quan tâm' : 'Quan tâm'}
+          {currentWord.isInterested ? 'Skip Interested' : 'Interested'}
         </button>
       </div>
     </div>
