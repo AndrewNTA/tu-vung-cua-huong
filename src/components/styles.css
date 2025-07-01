@@ -1,7 +1,8 @@
-.home-container {
+.adr-page-container {
   background-color: rgb(255, 255, 255, 1);
   box-sizing: border-box;
   padding: 20px 16px;
+  padding-bottom: 46px;
 }
 .adr-card {
   line-height: 1.5rem;

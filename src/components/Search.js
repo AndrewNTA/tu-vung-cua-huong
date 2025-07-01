@@ -15,7 +15,7 @@ const getFilterResult = (key = '', all = []) => {
   const formatedKey = key.toLowerCase();
   return all.filter((w) => {
     const englishText = w.englishText.toLowerCase();
-    return englishText.includes(formatedKey)
+    return englishText.includes(formatedKey);
   });
 };
 
@@ -29,9 +29,10 @@ export const Search = () => {
       setFilterResult(null);
       return;
     }
-    const filterd = getFilterResult(searchKey, words);
-    setFilterResult(filterd);
+    const filtered = getFilterResult(searchKey, words);
+    setFilterResult(filtered);
   }, 300);
+
   return (
     <div className="adr-search-container">
       <input
@@ -41,16 +42,17 @@ export const Search = () => {
         name="search-input"
         onChange={handleSearch}
       />
-      <div className="adr-search-result">
-        {filterResult &&
-          filterResult.map((i) => {
+      {filterResult && (
+        <div className="adr-search-result">
+          {filterResult.map((i) => {
             return (
               <div key={i.id} className="adr-search-item">
                 {i.englishText}
               </div>
             );
           })}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

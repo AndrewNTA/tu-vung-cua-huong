@@ -1,21 +1,6 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-  useRef,
-} from 'react';
-import './styles.css';
-import {
-  AppContext,
-  HOME_TAB,
-  INTERESTED_TAB,
-  PRACTICE_TAB,
-  REMEMBERED_TAB,
-} from '../App';
+import React, { useContext, useEffect, useState } from 'react';
+import { AppContext } from '../App';
 import { gql, useMutation } from '@apollo/client';
-import { Search } from './Search';
 
 const UPDATE_IS_REMEMBERED = gql`
   mutation UpdateIsRemembered($id: ID!, $isRemembered: Boolean!) {
@@ -43,18 +28,11 @@ const PUBLISH_WORD = gql`
   }
 `;
 
-export function Home() {
+export function Card({ filterWords }) {
   const [index, setIndex] = useState(0);
   const [isShow, setIsShow] = useState(false);
-  const { words, tab, updateWords } = useContext(AppContext);
-  const currentTab = useRef(null);
+  const { words, updateWords } = useContext(AppContext);
 
-  useEffect(() => {
-    if (tab !== currentTab.current) {
-      currentTab.current = tab;
-      setIndex(0);
-    }
-  }, [tab]);
   const [
     updateIsRemembered,
     { data: dataRemembered, loading: loadingRemembered },
@@ -79,17 +57,6 @@ export function Home() {
     setIsShow((isShow) => !isShow);
   };
 
-  const getWordList = useCallback(() => {
-    if (tab === REMEMBERED_TAB) {
-      return words.filter((w) => w.isRemembered);
-    }
-    if (tab === INTERESTED_TAB) {
-      return words.filter((w) => w.isInterested);
-    }
-    return words;
-  }, [tab, words]);
-
-  const filterWords = useMemo(() => getWordList(), [getWordList]);
   const currentWord = filterWords[index];
 
   useEffect(() => {
@@ -163,23 +130,8 @@ export function Home() {
     });
   };
 
-  const displayPageName = () => {
-    if (tab === REMEMBERED_TAB) {
-      return 'Rememberd Page';
-    }
-    if (tab === INTERESTED_TAB) {
-      return 'Interested Page';
-    }
-    if (tab === PRACTICE_TAB) {
-      return 'Practive Page';
-    }
-    return 'Home Page';
-  };
-
   return (
-    <div className="home-container">
-      <div className="adr-page-title">{displayPageName()}</div>
-      {tab === HOME_TAB && <Search />}
+    <>
       <div className="adr-card">
         <div className="adr-primary-text">{primaryText}</div>
         <div>{`(${currentWord.wordType}) ${currentWord.pronounce}`}</div>
@@ -241,6 +193,6 @@ export function Home() {
           {currentWord.isInterested ? 'Skip Interested' : 'Interested'}
         </button>
       </div>
-    </div>
+    </>
   );
 }

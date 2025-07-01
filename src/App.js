@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Home } from './components/Home';
 import { useLazyQuery, gql } from '@apollo/client';
 import { Menu } from './components/Menu';
+import './components/styles.css';
+import { PracticePage } from './components/PracticePage';
+import { HomePage } from './components/HomePage';
+import { InterestedPage } from './components/InterestedPage';
+import { RememberedPage } from './components/RememberedPage';
 
 const WORDS_QUERY = gql`
   query Words($skip: Int) {
@@ -73,6 +77,20 @@ function App() {
   if (loading) {
     return <p className="adr-center">Loading...</p>;
   }
+
+  const renderPage = () => {
+    if (tab === PRACTICE_TAB) {
+      return <PracticePage />;
+    }
+    if (tab === INTERESTED_TAB) {
+      return <InterestedPage />;
+    }
+    if (tab === REMEMBERED_TAB) {
+      return <RememberedPage />;
+    }
+    return <HomePage />;
+  };
+
   return (
     <div className="App">
       <AppContext.Provider
@@ -82,7 +100,7 @@ function App() {
           updateWords: (newWords) => setWords(newWords),
         }}
       >
-        <Home />
+        {renderPage()}
         <Menu onChange={handleChangeTab} />
       </AppContext.Provider>
     </div>
