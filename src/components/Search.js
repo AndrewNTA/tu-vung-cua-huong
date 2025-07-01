@@ -19,7 +19,7 @@ const getFilterResult = (key = '', all = []) => {
   });
 };
 
-export const Search = () => {
+export const Search = ({ onDetail }) => {
   const { words } = useContext(AppContext);
   const [filterResult, setFilterResult] = useState(null);
 
@@ -32,6 +32,13 @@ export const Search = () => {
     const filtered = getFilterResult(searchKey, words);
     setFilterResult(filtered);
   }, 300);
+
+  const handleClickDetail = (id) => {
+    onDetail(id);
+    setFilterResult(null);
+    const inputField = document.getElementById('search-input');
+    inputField.value = '';
+  };
 
   return (
     <div className="adr-search-container">
@@ -46,7 +53,11 @@ export const Search = () => {
         <div className="adr-search-result">
           {filterResult.map((i) => {
             return (
-              <div key={i.id} className="adr-search-item">
+              <div
+                key={i.id}
+                className="adr-search-item"
+                onClick={() => handleClickDetail(i.id)}
+              >
                 {i.englishText}
               </div>
             );

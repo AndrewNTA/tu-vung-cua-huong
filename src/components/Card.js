@@ -28,7 +28,7 @@ const PUBLISH_WORD = gql`
   }
 `;
 
-export function Card({ filterWords }) {
+export function Card({ filterWords, searchId, clearSearch }) {
   const [index, setIndex] = useState(0);
   const [isShow, setIsShow] = useState(false);
   const { words, updateWords } = useContext(AppContext);
@@ -57,7 +57,9 @@ export function Card({ filterWords }) {
     setIsShow((isShow) => !isShow);
   };
 
-  const currentWord = filterWords[index];
+  const currentWord = searchId
+    ? words.find((w) => w.id === searchId)
+    : filterWords[index];
 
   useEffect(() => {
     if (
@@ -132,6 +134,11 @@ export function Card({ filterWords }) {
 
   return (
     <>
+      {searchId && (
+        <div className="adr-back-link" onClick={clearSearch}>
+          Go back
+        </div>
+      )}
       <div className="adr-card">
         <div className="adr-primary-text">{primaryText}</div>
         <div>{`(${currentWord.wordType}) ${currentWord.pronounce}`}</div>
@@ -150,25 +157,27 @@ export function Card({ filterWords }) {
           )}
         </div>
       </div>
-      <div className="adr-button-group">
-        <button
-          disabled={index === 0}
-          onClick={goBack}
-          className="adr-button btn-outline"
-        >
-          Prev
-        </button>
-        <div className="adr-index">{`${index + 1} / ${
-          filterWords.length
-        }`}</div>
-        <button
-          disabled={index === filterWords.length - 1}
-          onClick={goNext}
-          className="adr-button"
-        >
-          Next
-        </button>
-      </div>
+      {!searchId && (
+        <div className="adr-button-group">
+          <button
+            disabled={index === 0}
+            onClick={goBack}
+            className="adr-button btn-outline"
+          >
+            Prev
+          </button>
+          <div className="adr-index">{`${index + 1} / ${
+            filterWords.length
+          }`}</div>
+          <button
+            disabled={index === filterWords.length - 1}
+            onClick={goNext}
+            className="adr-button"
+          >
+            Next
+          </button>
+        </div>
+      )}
       <div className="adr-divider" />
       <div className="adr-row">
         <button className="adr-button btn-full" onClick={handleShow}>
